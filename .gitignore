@@ -1,0 +1,22 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+!Makefile
+
+# Unignore all dirs
+!*/
+
+# Emacs
+*~
+
+# Python object file
+*.pyc
+
+# Output file
+*.out
+
+# Compressed file
+*.tar.gz
