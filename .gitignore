@@ -20,3 +20,6 @@
 
 # Compressed file
 *.tar.gz
+
+# Object file
+*.o
