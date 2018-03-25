@@ -2,10 +2,21 @@
 #include <iostream>
 #include <vector>
 
-#include "Point.hpp"
+#include "Point.h"
 
-Point::Point(double x, double y)
+// Constructor
+Point::Point()
 {
-  this->x = x;
-  this->y = y;
+}
+
+// Deconstructor
+Point::~Point()
+{
+}
+
+// Set value
+void Point::set(double _x, double _y)
+{
+  this->x = _x;
+  this->y = _y;
 }

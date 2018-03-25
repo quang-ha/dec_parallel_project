@@ -1,9 +1,9 @@
 CXX = g++
-CXXFLAGS = -std=c++0x -Wall
+CXXFLAGS = -std=c++11 -Wall -O3
 
-OBJECTS = Point_test.o Point.o
+OBJECTS = main.o Point.o
 
-Point_test: $(OBJECTS)
+main: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(OBJECTS): Point.hpp
+$(OBJECTS): Point.h
