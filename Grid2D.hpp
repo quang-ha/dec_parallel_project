@@ -14,8 +14,7 @@ public:
     double x_resolution, y_resolution;
 
     Point& operator()(int i, int j);
-
-private:
-    void set_weights();
 };
+
+void set_weights(Grid2D& g);
 #endif
