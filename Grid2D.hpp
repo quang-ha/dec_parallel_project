@@ -8,7 +8,14 @@ class Grid2D {
 public:
     Grid2D(Point& top_left, Point& bot_right, double x_resolution, double y_resolution);
     ~Grid2D();
+
     std::vector<std::vector<Point>> points;
+    std::vector<std::vector<double>> weights;
+    double x_resolution, y_resolution;
+
     Point& operator()(int i, int j);
+
+private:
+    void set_weights();
 };
 #endif

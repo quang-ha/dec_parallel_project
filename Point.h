@@ -14,11 +14,11 @@ public:
     void set(double _x, double _y);
 };
 
-inline double dist(const Point& a, const Point& b)
+inline double distsq(const Point& a, const Point& b)
 {
   double xdistsq = (a.x - b.x)*(a.x - b.x);
   double ydistsq = (a.y - b.y)*(a.y - b.y);
-  return sqrt(xdistsq+ydistsq);
+  return xdistsq+ydistsq;
 }
 
 inline double area(const Point& a,
