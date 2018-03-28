@@ -6,15 +6,15 @@
 
 class Grid2D {
 public:
-    Grid2D(Point& top_left, Point& bot_right, double x_resolution, double y_resolution);
+    Grid2D(Point& top_left, Point& bot_right, int Nx, int Ny);
     ~Grid2D();
 
     std::vector<std::vector<Point>> points;
-    std::vector<std::vector<double>> weights;
-    double x_resolution, y_resolution;
+    /* std::vector<std::vector<double>> weights; */
+    int Nx, Ny;
 
     Point& operator()(int i, int j);
 };
 
-void set_weights(Grid2D& g);
+/* void set_weights(Grid2D& g); */
 #endif
