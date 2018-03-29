@@ -253,7 +253,7 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
 
       unew[i][j] = w01*(u[i][j] - u[i-1][j]) + w02*(u[i][j] - u[i-1][j+1]) +
                 	w03*(u[i][j] - u[i][j+1]) +
-                	w04*(u[i][j] - u[i+1][j]) +
+                	w04*(u[i][j] - u[i+1][j]);
     }
 
     // Rightmost column weights
@@ -431,3 +431,4 @@ w06*(u[i][j] - u[i][j-1]);
     w05 = 0;
     w06 = 0 + (ed61sq + ed01sq - ed06sq)/(8.0*A061);
     unew[i][j] = w01*(u[i][j] - u[i-1][j]) + w06*(u[i][j] - u[i][j-1]);
+}
