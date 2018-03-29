@@ -210,7 +210,10 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
         w05 = 0 + 0;
         w06 = 0 + (ed61sq + ed01sq - ed06sq)/(8.0*A061);
 
-        // TODO: Update output vector.
+        unew[i][j] = w01*(u[i][j] - u[i-1][j]) +
+                  	w02*(u[i][j] - u[i-1][j+1]) +
+                  	w03*(u[i][j] - u[i][j+1]) +
+                  	w06*(u[i][j] - u[i][j-1]);
     }
 
     // Leftmost column weights
@@ -248,7 +251,9 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
       w05 = 0 + 0;
       w06 = 0 + 0;
 
-      // TODO: Update output vector.
+      unew[i][j] = w01*(u[i][j] - u[i-1][j]) + w02*(u[i][j] - u[i-1][j+1]) +
+                	w03*(u[i][j] - u[i][j+1]) +
+                	w04*(u[i][j] - u[i+1][j]) +
     }
 
     // Rightmost column weights
@@ -286,7 +291,9 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
       w05 = (ed04sq + ed45sq - ed05sq)/(8.0*A045) + (ed56sq + ed06sq - ed05sq)/(8.0*A056);
       w06 = (ed05sq + ed56sq - ed06sq)/(8.0*A056) + (ed61sq + ed01sq - ed06sq)/(8.0*A061);
 
-      // TODO: Update output vector.
+      unew[i][j] = w01*(u[i][j] - u[i-1][j]) + w04*(u[i][j] - u[i+1][j]) +
+                	w05*(u[i][j] - u[i+1][j-1]) +
+                	w06*(u[i][j] - u[i][j-1]);
     }
 
     // ====================== Corner Points.
@@ -321,7 +328,7 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
     w04 = (ed03sq + ed34sq - ed04sq)/(8.0*A034) + 0;
     w05 = 0;
     w06 = 0;
-    // TODO: Update output vector.
+    unew[i][j] = w03*(u[i][j] - u[i][j+1]) + w04*(u[i][j] - u[i+1][j]);
 
     // Top right. i = 0; j = g.Nx - 1
     i = 0; j = g.Ny -1;
@@ -354,7 +361,8 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
     w04 = 0 + (ed45sq + ed05sq - ed04sq)/(8.0*A045);
     w05 = (ed04sq + ed45sq - ed05sq)/(8.0*A045) + (ed56sq + ed06sq - ed05sq)/(8.0*A056);
     w06 = (ed05sq + ed56sq - ed06sq)/(8.0*A056) + 0;
-    //TODO: Update output vector.
+    unew[i][j] = w04*(u[i][j] - u[i+1][j]) + w05*(u[i][j] - u[i+1][j-1]) +
+w06*(u[i][j] - u[i][j-1]);
 
 
     // Bot left. i = g.Nx - 1, j = 0;
@@ -388,7 +396,8 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
     w04 = 0;
     w05 = 0;
     w06 = 0;
-    // TODO: Update output vector.
+    unew[i][j] = w01*(u[i][j] - u[i-1][j]) + w02*(u[i][j] - u[i-1][j+1]) +
+                w03*(u[i][j] - u[i][j+1]) ;
 
     // Bot right. i = g.Nx -1; j = g.Ny - 1;
     i = g.Nx -1; j = g.Ny - 1;
@@ -421,9 +430,4 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
     w04 = 0;
     w05 = 0;
     w06 = 0 + (ed61sq + ed01sq - ed06sq)/(8.0*A061);
-    // TODO: Update output vector.
-  // Store the results into y
-  for (int i = 1; i < g.Nx - 1; ++i)
-    for (int j = 1; j < g.Ny - 1; ++j)
-      u1[(i-1)*(g.Nx-2) + (j-1)] = unew[i][j];
-}
+    unew[i][j] = w01*(u[i][j] - u[i-1][j]) + w06*(u[i][j] - u[i][j-1]);
