@@ -62,10 +62,7 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
   // Strides 1D vector into 2D matrix
   for (int i=0; i <= g.Nx-1; i++)
     for (int j=0; j <= g.Ny-1; j++)
-      {
-	u[i][j] = u0[i*g.Nx + j]; // All other points
-	printf("%d %d %f \n", i, j, u[i][j]);
-      }
+      u[i][j] = u0[i*g.Nx + j]; 
 
   // Interior points
   for (int i = 1; i < g.Nx - 1; ++i)
@@ -429,11 +426,7 @@ void MatOp(Grid2D& g, double* u0, double* u1) {
       w06*(u[i][j] - u[i][j-1]);
 
     // Strides 2D matrix back into 2D matrix
-    printf("unew \n");
     for (int i=0; i <= g.Nx-1; i++)
       for (int j=0; j <= g.Ny-1; j++)
-	{
-	  u1[i*g.Nx + j] = unew[i][j]; // All other points
-	  printf("%d %d %f \n", i, j, unew[i][j]);
-	}
+	u1[i*g.Nx + j] = unew[i][j]; 
 }
