@@ -20,6 +20,16 @@ Grid2D::Grid2D(Point& top_left, Point& bot_right, int Nx, int Ny) {
 Grid2D::~Grid2D() {
 }
 /*=======================================================================*/
+int Grid2D::rows()
+{
+  return this->Nx*this->Ny;
+}
+/*=======================================================================*/
+int Grid2D::cols()
+{
+  return this->Nx*this->Ny;
+}
+/*=======================================================================*/
 Point& Grid2D::operator()(int i, int j) {
   return this->points[i][j];
 }
