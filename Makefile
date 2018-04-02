@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -O3
+CXXFLAGS = -std=c++11 -Wall -O3 -I$(EIG_DIR) -I$(SPECTRA_DIR)
 
 OBJECTS = main.o Point.o Grid2D.o
 
