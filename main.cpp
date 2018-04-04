@@ -2,6 +2,7 @@
 #include <vector>
 #include "Point.h"
 #include "Grid2D.h"
+#include "PeriodicGrid2D.h"
 
 #include <Eigen/Core>
 #include <SymEigsSolver.h>
@@ -17,6 +18,7 @@ int main(int argc, char* argv[])
   Point a(LOW, LOW);
   Point b(HIGH, HIGH);
   Grid2D g(a, b, N, N);
+  PeriodicGrid2D pg(a, b, N, N);
 
   Spectra::SymEigsSolver<double, Spectra::LARGEST_ALGE, Grid2D> eigs(&g, 15, 16);
   eigs.init();

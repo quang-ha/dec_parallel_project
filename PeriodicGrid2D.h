@@ -1,5 +1,5 @@
-#ifndef GRID2D_H
-#define GRID2D_H
+#ifndef PERIODICGRID2D_H
+#define PERIODICGRID2D_H
 
 #include <vector>
 #include <tuple>
@@ -30,4 +30,5 @@ public:
 
 // Returns a matvec the laplacian operator on the grid.
 void laplace_op(PeriodicGrid2D &g, double *x_in, double *x_out);
+
 #endif
