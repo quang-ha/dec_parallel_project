@@ -55,6 +55,52 @@ Point PeriodicGrid2D::operator()(int i, int j) {
     j = j%(this->Ny - 1) + Ny;
     wrapped_y_offset = - this->Ly;
   }
+  if (wrapped_x_offset == 0 && wrapped_y_offset == 0)
+    return this->points[i][j];
+  else
+    return this->points[i][j] + Point(wrapped_x_offset, wrapped_y_offset);
 
-  return this->points[i][j] + Point(wrapped_x_offset, wrapped_y_offset);
+}
+
+void laplace_op(PeriodicGrid2D &g, double *x_in, double *x_out) {
+
+  for (int i = 0; i < g.Nx; ++i) {
+    for (int j = 0; j < g.Ny; ++j) {
+
+      // Edges frm center.
+      double ed01sq = distsq(g(i, j), g(i-1, j));
+      double ed02sq = distsq(g(i, j), g(i-1, j+1));
+      double ed03sq = distsq(g(i, j), g(i, j+1));
+      double ed04sq = distsq(g(i, j), g(i+1, j));
+      double ed05sq = distsq(g(i, j), g(i+1, j-1));
+      double ed06sq = distsq(g(i, j), g(i, j-1));
+
+      double ed12sq = distsq(g(i-1, j), g(i-1, j+1));
+      double ed23sq = distsq(g(i-1, j+1), g(i, j+1));
+      double ed34sq = distsq(g(i, j+1), g(i+1, j));
+      double ed45sq = distsq(g(i+1, j), g(i+1, j-1));
+      double ed56sq = distsq(g(i+1, j-1), g(i, j-1));
+      double ed61sq = distsq(g(i, j-1), g(i-1, j));
+
+      double A012 = area(g(i, j), g(i-1, j), g(i, j+1));
+      double A023 = area(g(i, j), g(i-1, j+1), g(i, j+1));
+      double A034 = area(g(i, j), g(i, j+1), g(i+1, j));
+      double A045 = area(g(i, j), g(i+1, j), g(i+1, j-1));
+      double A056 = area(g(i, j), g(i+1, j-1), g(i, j-1));
+      double A061 = area(g(i, j), g(i, j-1), g(i-1, j));
+
+      double w01 = (ed06sq + ed61sq - ed01sq)/(8.0*A061) +
+  (ed12sq + ed02sq - ed01sq)/(8.0*A012);
+      double w02 = (ed01sq + ed12sq - ed02sq)/(8.0*A012) +
+  (ed23sq + ed03sq - ed02sq)/(8.0*A023);
+      double w03 = (ed02sq + ed23sq - ed03sq)/(8.0*A023) +
+  (ed34sq + ed04sq - ed03sq)/(8.0*A034);
+      double w04 = (ed03sq + ed34sq - ed04sq)/(8.0*A034) +
+  (ed45sq + ed05sq - ed04sq)/(8.0*A045);
+      double w05 = (ed04sq + ed45sq - ed05sq)/(8.0*A045) +
+  (ed56sq + ed06sq - ed05sq)/(8.0*A056);
+      double w06 = (ed05sq + ed56sq - ed06sq)/(8.0*A056) +
+  (ed61sq + ed01sq - ed06sq)/(8.0*A061);
+    }
+  }
 }
