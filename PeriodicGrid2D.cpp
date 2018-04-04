@@ -108,14 +108,13 @@ void laplace_op(PeriodicGrid2D &g, double *x_in, double *x_out) {
 	(ed61sq + ed01sq - ed06sq)/(8.0*A061);
       
       // Calculate the resulting 2D of the laplace operator
-      double central_u = g(i, j).u
-	g(i, j).u = w01*(central_u - g(i-1, j).u) +
+      double central_u = g(i, j).u;
+      g(i, j).u = w01*(central_u - g(i-1, j).u) +
 	w02*(central_u - g(i-1, j+1).u) +
 	w03*(central_u - g(i, j+1).u) +
 	w04*(central_u - g(i+1, j).u) +
 	w05*(central_u - g(i+1, j-1).u) +
 	w06*(central_u - g(i, j-1).u);
-      
     }
   }
   
