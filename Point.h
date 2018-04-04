@@ -15,6 +15,7 @@ public:
   void set(double _x, double _y);
   Point operator+(Point&& other);
   Point operator-(Point& other);
+  double u = 0; // The variable 'associated' with the point.
 };
 
 inline double distsq(const Point& a, const Point& b)

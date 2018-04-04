@@ -64,6 +64,11 @@ Point PeriodicGrid2D::operator()(int i, int j) {
 
 void laplace_op(PeriodicGrid2D &g, double *x_in, double *x_out) {
 
+  // Strides 1D vector into 2D matrix
+  for (int i=0; i < g.Nx; ++i)
+    for (int j=0; j < g.Ny; ++j)
+      g(i, j).u = x_in[i*g.Nx + j];
+
   for (int i = 0; i < g.Nx; ++i) {
     for (int j = 0; j < g.Ny; ++j) {
 
@@ -101,6 +106,23 @@ void laplace_op(PeriodicGrid2D &g, double *x_in, double *x_out) {
   (ed56sq + ed06sq - ed05sq)/(8.0*A056);
       double w06 = (ed05sq + ed56sq - ed06sq)/(8.0*A056) +
   (ed61sq + ed01sq - ed06sq)/(8.0*A061);
+
+  // Calculate the resulting 2D of the laplace operator
+  double central_u = g(i, j).u
+  g(i, j).u = w01*(central_u - g(i-1, j).u) +
+w02*(central_u - g(i-1, j+1).u) +
+w03*(central_u - g(i, j+1).u) +
+w04*(central_u - g(i+1, j).u) +
+w05*(central_u - g(i+1, j-1).u) +
+w06*(central_u - g(i, j-1).u);
+
     }
   }
+
+
+  // Strides 2D matrix back into 2D matrix
+  for (int i=0; i < g.Nx; ++i)
+    for (int j=0; j < g.Ny; ++j)
+      x_out[i*g.Nx + j] = g(i, j).u;
+
 }
