@@ -11,17 +11,17 @@ struct PeriodicGrid2D {
     int Nx, Ny;
     double Lx, Ly;
     vector<vector<Point>> data;
-    PeriodicGrid2D(int nx, int ny, double lenx, double leny) {
+    PeriodicGrid2D(int nx, double dxdy, double lenx, double leny) {
         Nx = nx;
-        Ny = ny;
         Lx = lenx;
         Ly = leny;
         double dLx = lenx/(nx-1);
-        double dLy = leny/(ny-1);
+        double dLy = dLx/dxdy; // Calculate dLy using the ratio dx/dy
+	Ny = (int)((Ly/dLy) + 1);
 
-        for (int i = 0; i < nx; ++i) {
-          data.push_back(vector<Point>(ny));
-            for (int j = 0; j < ny; ++j) {
+        for (int i = 0; i < Nx; ++i) {
+          data.push_back(vector<Point>(Ny));
+            for (int j = 0; j < Ny; ++j) {
                 data[i][j] = Point(i*dLx, j*dLy);
             }
         }
