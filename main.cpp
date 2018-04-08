@@ -7,7 +7,7 @@
 
 #include "LaplacePeriodicGrid2D.h"
 
-#define N 8 // Number of points in each direction
+#define N 10 // Number of points in each direction
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 
@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
   LaplacePeriodicGrid2D lpg(pg);
 
   Spectra::SymEigsSolver<double, Spectra::LARGEST_ALGE, LaplacePeriodicGrid2D>
-    eigs(&lpg, 4, 8);
+    eigs(&lpg, 10, 20);
   eigs.init();
   eigs.compute();
 

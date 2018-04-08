@@ -19,14 +19,15 @@ int LaplacePeriodicGrid2D::cols()
 /*=======================================================================*/
 void LaplacePeriodicGrid2D::perform_op(double *x_in, double *x_out) {
   // Strides 1D vector into 2D matrix
-  for (int i=0; i < g.Nx; ++i) {
-    for (int j=0; j < g.Ny; ++j) {
+  for (int i=0; i < g.Nx; ++i)
+    for (int j=0; j < g.Ny; ++j)
       g.setu(i, j, x_in[i*g.Nx + j]);
-    }
-  }
+
+  // Set up a temporary 2D array to store the update value
+  double temp[g.Nx][g.Ny];
+  
   for (int i = 0; i < g.Nx; ++i) {
     for (int j = 0; j < g.Ny; ++j) {
-
       // Edges from center.
       double ed01sq = distsq(g.getxy(i, j), g.getxy(i-1, j));
       double ed02sq = distsq(g.getxy(i, j), g.getxy(i-1, j+1));
@@ -62,23 +63,23 @@ void LaplacePeriodicGrid2D::perform_op(double *x_in, double *x_out) {
       double w06 = (ed05sq + ed56sq - ed06sq)/(8.0*A056) +
 	(ed61sq + ed01sq - ed06sq)/(8.0*A061);
 
-      // Calculate the resulting 2D of the laplace operator
-      double central_u = g(i, j).u;
-      double new_u = w01*(central_u - g(i-1, j).u) +
-	w02*(central_u - g(i-1, j+1).u) +
-	w03*(central_u - g(i, j+1).u) +
-	w04*(central_u - g(i+1, j).u) +
-	w05*(central_u - g(i+1, j-1).u) +
-	w06*(central_u - g(i, j-1).u);
-
-    g.setu(i, j, new_u);
+      // Calculate the resulting 2D of the laplace operator      
+      temp[i][j] = w01*(g(i, j).u - g(i-1, j).u) +
+	w02*(g(i, j).u - g(i-1, j+1).u) +
+	w03*(g(i, j).u - g(i, j+1).u) +
+	w04*(g(i, j).u - g(i+1, j).u) +
+	w05*(g(i, j).u - g(i+1, j-1).u) +
+	w06*(g(i, j).u - g(i, j-1).u);
     }
   }
 
   // Strides 2D matrix back into 2D matrix
   for (int i=0; i < g.Nx; ++i)
     for (int j=0; j < g.Ny; ++j)
-      x_out[i*g.Nx + j] = g(i, j).u;
+      {
+	g.setu(i, j, temp[i][j]);
+	x_out[i*g.Nx + j] = g(i, j).u;
+      }
 }
 
 /*=======================================================================*/
