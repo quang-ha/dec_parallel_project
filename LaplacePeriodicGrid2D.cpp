@@ -7,7 +7,6 @@ LaplacePeriodicGrid2D::LaplacePeriodicGrid2D(PeriodicGrid2D& _g) : g{_g} {
 LaplacePeriodicGrid2D::~LaplacePeriodicGrid2D() {
 }
 /*=======================================================================*/
-/*=======================================================================*/
 int LaplacePeriodicGrid2D::rows()
 {
   return g.Nx*g.Ny;
