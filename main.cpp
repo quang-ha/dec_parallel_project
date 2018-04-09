@@ -20,21 +20,39 @@ int main(int argc, char* argv[])
   pg.print_coords();
   LaplacePeriodicGrid2D lpg(pg);
 
+  // Large eigenvalue
   Spectra::SymEigsSolver<double, Spectra::LARGEST_ALGE, LaplacePeriodicGrid2D>
-    eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
-  eigs.init();
-  eigs.compute();
+    l_eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
+  l_eigs.init();
+  l_eigs.compute();
 
+  // Large eigenvalue
+  Spectra::SymEigsSolver<double, Spectra::SMALLEST_ALGE, LaplacePeriodicGrid2D>
+    s_eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
+  s_eigs.init();
+  s_eigs.compute();
+  
   // Writing to file
   std::ofstream outFile;
   outFile.open("eigVals.dat");
-  if(eigs.info() == Spectra::SUCCESSFUL)
+  
+  // Print out large eigenvalues
+  if(l_eigs.info() == Spectra::SUCCESSFUL)
     {
-      Eigen::VectorXd evalues = eigs.eigenvalues();
-      outFile << "Eigenvalues found: \n" << evalues << "\n";
+      Eigen::VectorXd l_evalues = l_eigs.eigenvalues();
+      outFile << "Eigenvalues found: \n" << l_evalues << "\n";
     }
   else
-    outFile << "Eigenvalues NOT found!\n";
+    outFile << "Large eigenvalues NOT found!\n";
+  // Print out small eigenvalues
+  if(s_eigs.info() == Spectra::SUCCESSFUL)
+    {
+      Eigen::VectorXd s_evalues = s_eigs.eigenvalues();
+      outFile << s_evalues << "\n";
+    }
+  else
+    outFile << "Small eigenvalues NOT found!\n";
+  
   outFile.close();
   
   return 0;
