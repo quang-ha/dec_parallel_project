@@ -9,7 +9,7 @@
 #include "LaplacePeriodicGrid2D.h"
 
 #define NX 8 // Number of points in x direction
-#define DXDY 1.15470053838 // Ratio between dx and dy for 60 degree
+#define DXDY 1.73205080757 // Ratio between dx and dy for 60 degree
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 

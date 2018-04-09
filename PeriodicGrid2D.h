@@ -2,7 +2,7 @@
 #define PERIODIC_GRID_H
 
 #include <vector>
-#
+#include <random>
 
 #include "Point.h"
 
@@ -19,11 +19,19 @@ struct PeriodicGrid2D {
     double dLx = lenx/(nx-1);
     double dLy = dLx/dxdy; // Calculate dLy using the ratio dx/dy
     Ny = (int)((Ly/dLy) + 1);
+
+    // Add random noise
+    std::default_random_engine generator(1234); // seed number
+    std::normal_distribution<double> dist(0.0, 1.0); // mean and std
     
     for (int i = 0; i < Nx; ++i) {
       data.push_back(vector<Point>(Ny));
       for (int j = 0; j < Ny; ++j) {
-	data[i][j] = Point(i*dLx, j*dLy);
+	if ((i > 0) && (i < Nx -1) && (j > 0) && (j<Ny-1))
+	  data[i][j] = Point(i*dLx + 0.01*dist(generator),
+			     j*dLy + 0.01*dist(generator));
+	else
+	  data[i][j] = Point(i*dLx, j*dLy);
       }
     }
   }
