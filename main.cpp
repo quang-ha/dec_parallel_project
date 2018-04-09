@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
   LaplacePeriodicGrid2D lpg(pg);
 
   Spectra::SymEigsSolver<double, Spectra::LARGEST_ALGE, LaplacePeriodicGrid2D>
-    eigs(&lpg, NX*2, NX*4);
+    eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
   eigs.init();
   eigs.compute();
 
