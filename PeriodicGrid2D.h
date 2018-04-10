@@ -1,6 +1,7 @@
 #ifndef PERIODIC_GRID_H
 #define PERIODIC_GRID_H
 
+#include <cmath>
 #include <vector>
 #include <random>
 
@@ -12,30 +13,30 @@ struct PeriodicGrid2D {
   int Nx, Ny;
   double Lx, Ly;
   vector<vector<Point>> data;
-  PeriodicGrid2D(int nx, double dxdy, double lenx, double leny) {
+  double dLx, dLy;
+  PeriodicGrid2D(int nx, double ny, double lenx, double leny) {
     Nx = nx;
+    Ny = ny;
     Lx = lenx;
     Ly = leny;
-    double dLx = lenx/(nx-1);
-    double dLy = dLx/dxdy; // Calculate dLy using the ratio dx/dy
-    Ny = (int)((Ly/dLy) + 1);
+    dLx = lenx/(nx-1);
+    dLy = leny/(ny-1); // Calculate dLy using the ratio dx/dy
 
     // Add random noise
-    std::default_random_engine generator(1234); // seed number
-    std::normal_distribution<double> dist(0.0, 1.0); // mean and std
-    
+    //std::default_random_engine generator(1234); // seed number
+    //std::normal_distribution<double> dist(0.0, 1.0); // mean and std
+
     for (int i = 0; i < Nx; ++i) {
       data.push_back(vector<Point>(Ny));
       for (int j = 0; j < Ny; ++j) {
 	if ((i > 0) && (i < Nx -1) && (j > 0) && (j<Ny-1))
-	  data[i][j] = Point(i*dLx + 0.01*dist(generator),
-			     j*dLy + 0.01*dist(generator));
+	  data[i][j] = Point(i*dLx, j*dLy);
 	else
 	  data[i][j] = Point(i*dLx, j*dLy);
       }
     }
   }
-  
+
   Point getxy(int i, int j) {
       /* This function gets the x and y values of the Point object at position
 	 (i, j) in the PeriodicGrid2D object. It wraps around, offseting
@@ -43,7 +44,7 @@ struct PeriodicGrid2D {
 	 will take you to (1, 1). This is a GETTER. It will NOT give you direct
 	 access to the grid point, but a copied Point object which you can use to
 	 do Point ops on.*/
-    
+
     double wrapped_x_offset = 0, wrapped_y_offset = 0;
     Point result;
     // Wrapping around i = Nx -1
@@ -68,7 +69,7 @@ struct PeriodicGrid2D {
     else
       return data[i][j] + Point(wrapped_x_offset, wrapped_y_offset);
   }
-  
+
   void setu(int i, int j, double u) {
     /* This function sets the u values of the Point object at position
        (i, j) in the PeriodicGrid2D object. It wraps around without offseting
@@ -92,7 +93,21 @@ struct PeriodicGrid2D {
       }
       data[i][j].u= u;
   }
-  
+
+
+  void skewx(double theta) {
+      // Negative skews in degrees makes it move the way we want.
+      // Skew after making the grid. I think this should work even for randomly
+      // moved points, since only the individual point positions matter.
+      double relative_x_offset = std::tan(theta);
+
+      for (int i = 0; i < Nx; ++i) {
+          for (int j = 0; j < Ny; ++j) {
+              data[i][j].y += relative_x_offset*(data[i][j].x);
+          }
+      }
+  }
+
   Point operator()(int i, int j) {
     /* Simple accessor operator that implements a simple wraparound. -1 wraps
        around the back of the index. Going over the maximum element index wraps
@@ -112,7 +127,7 @@ struct PeriodicGrid2D {
     else if (j < 0) {
       j = j%(Ny - 1) + Ny - 1;
     }
-    
+
     return data[i][j];
   }
   // Print the point coordinates out to a file
@@ -126,7 +141,7 @@ struct PeriodicGrid2D {
     for (int i = 0; i < Nx; ++i)
       for (int j = 0; j < Ny; ++j)
 	fprintf(pfile, "%f %f \n", data[i][j].x, data[i][j].y);
-    
+
     fclose(pfile);
   }
 };
