@@ -29,7 +29,7 @@ struct PeriodicGrid2D {
     for (int i = 0; i < Nx; ++i) {
       data.push_back(vector<Point>(Ny));
       for (int j = 0; j < Ny; ++j) {
-	       data[i][j] = Point(i*dLx + j*dLx*0.5, i*1.73205/2*j*dLy);
+	       data[i][j] = Point(i*dLx + j*0.5*dLx, j*1.73205/2*dLy);
       }
     }
   }
@@ -45,9 +45,11 @@ struct PeriodicGrid2D {
     double wrapped_x_offset = 0, wrapped_y_offset = 0;
     Point result;
     // Wrapping around i = Nx -1
+    int xwrap = 0, wrap = 0;
     if (i > Nx - 1) {
       i = i%(Nx - 1);
       wrapped_x_offset = Lx;
+
     }
     else if (i < 0) {
       i = i%(Nx - 1) + Nx - 1;
@@ -92,17 +94,17 @@ struct PeriodicGrid2D {
   }
 
 
-  /*void skewx(double theta) {
+  void skewx(double theta) {
       // Negative skews in degrees makes it move the way we want.
       // Skew after making the grid. I think this should work even for randomly
       // moved points, since only the individual point positions matter.
       double relative_x_offset = std::tan(theta);
-      double relative_y_offset = std::
+      double relative_y_offset = 0;
       for (int i = 0; i < Nx; ++i) {
           for (int j = 0; j < Ny; ++j) {
               data[i][j].y += relative_x_offset*(data[i][j].x);
           }
-      }*/
+      }
   }
 
   Point operator()(int i, int j) {
