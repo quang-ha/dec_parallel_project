@@ -48,46 +48,60 @@ struct PeriodicGrid2D {
     Point offset;
     // Wrapping around i = Nx -1
     int xwrap = 0, ywrap = 0;
+    // Checking for wraparound.
     if (i > Nx - 1) {
-      i = i%(Nx - 1);
       xwrap = 1;
     }
     else if (i < 0) {
-      i = i%(Nx - 1) + Nx - 1;
       xwrap = -1   ;
     }
     if (j > Ny - 1) {
-      j = j%(Ny - 1);
       ywrap = 1;
     }
     else if (j < 0) {
-      j = j%(Ny - 1) + Ny - 1;
       ywrap = -1;
     }
     if (!xwrap && !ywrap) // No wrap. Point is interior.
       return data[i][j];
     else if (xwrap == 1) { // Goes around the right side.
         // printf("Posxwrap\n");
+        i = Nx - 1; // Base point to which offset is added.
         if (!ywrap) {// Goes around right edge only.
             offset = data[1][j] - data[0][j];
+            //printf("Offset x:%f y:%f\n", offset.x, offset.y);
+            // printf("Data x:%f y:%f\n", data[i][j].x, data[i][j].y);
             // printf("\nOffset coords %f %f\n", offset.x, offset.y);
             result = data[i][j] + offset;
+            return result;
         }
         else if(ywrap == 1) { // Goes around bot-right corner.
+            j = Ny - 1;
             offset = data[1][1] - data[0][0];
             // printf("\n!!BOT RIGHT!!\nOffset coords %f %f\n\n", offset.x, offset.y);
             result = data[i][j] + offset;
+            return result;
         }
-        else if (ywrap == -1) // Goes around top-right corner.
-            result = data[i][j] + (data[1][Ny - 2] - data[0][Ny - 1]);
+        else if (ywrap == -1) {// Goes around top-right corner.
+            j = 0;
+            offset = data[1][Ny - 2] - data[0][Ny - 1];
+            result = data[i][j] + offset;
+            return result;
         }
+    }
     else if (xwrap == -1) { // Goes around left edge.
-        if (!ywrap) // Goes around left edge only.
+        i = 0;
+        if (!ywrap) {// Goes around left edge only.
             result = data[i][j] + (data[Nx - 2][j] - data[Nx - 1][j]);
-        else if(ywrap == 1) // Goes around bot-left corner.
+            return result;
+        }
+        else if(ywrap == 1)  {// Goes around bot-left corner.
+            j = Ny - 1;
             result = data[i][j] + (data[1][Ny -2] - data[0][Nx -1]);
-        else if (ywrap == -1) // Goes around top-left corner.
+        }
+        else if (ywrap == -1) {// Goes around top-left corner.
+            j = 0;
             result = data[i][j] + (data[Nx - 2][Ny - 2] - data[Nx - 1][Ny - 1]);
+        }
     }
     return result;
 }
