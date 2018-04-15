@@ -19,10 +19,10 @@ struct PeriodicGrid2D {
     Nx = nx;
     Ny = ny;
     Lx = lenx;
-    Ly = leny;
-    dLx = lenx/(nx-1);
-    dLy = leny/(ny-1); // Calculate dLy using the ratio dx/dy
-
+    Ly = 0.866025404*leny;
+    dLx = Lx/(nx-1);
+    dLy = Ly/(ny-1); // Calculate dLy using the ratio dx/dy
+    printf("Lx: %f and Ly: %f\n", Lx, Ly);
     // Add random noise
     //std::default_random_engine generator(1234); // seed number
     //std::normal_distribution<double> dist(0.0, 1.0); // mean and std
@@ -30,7 +30,8 @@ struct PeriodicGrid2D {
     for (int i = 0; i < Nx; ++i) {
       data.push_back(vector<Point>(Ny));
       for (int j = 0; j < Ny; ++j) {
-	       data[i][j] = Point(i*dLx + j*0.5*dLx, j*1.73205/2*dLy);
+	       // data[i][j] = Point(i*dLx + j*0.5*dLx, j*1.73205/2dLy);
+	       data[i][j] = Point(i*dLx + j*0.5*dLx, j*dLy);
       }
     }
   }
@@ -44,6 +45,7 @@ struct PeriodicGrid2D {
 	 do Point ops on.*/
 
     Point result;
+    Point offset;
     // Wrapping around i = Nx -1
     int xwrap = 0, ywrap = 0;
     if (i > Nx - 1) {
@@ -64,18 +66,31 @@ struct PeriodicGrid2D {
     }
     if (!xwrap && !ywrap) // No wrap. Point is interior.
       return data[i][j];
-    else if (xwrap == 1 && ywrap == 0) { // Goes around the right side.
-        printf("Posxwrap\n");
-        result = data[i][j] + (data[0][j] - data[1][j]);
+    else if (xwrap == 1) { // Goes around the right side.
+        // printf("Posxwrap\n");
+        if (!ywrap) {// Goes around right edge only.
+            offset = data[1][j] - data[0][j];
+            // printf("\nOffset coords %f %f\n", offset.x, offset.y);
+            result = data[i][j] + offset;
+        }
+        else if(ywrap == 1) { // Goes around bot-right corner.
+            offset = data[1][1] - data[0][0];
+            // printf("\n!!BOT RIGHT!!\nOffset coords %f %f\n\n", offset.x, offset.y);
+            result = data[i][j] + offset;
+        }
+        else if (ywrap == -1) // Goes around top-right corner.
+            result = data[i][j] + (data[1][Ny - 2] - data[0][Ny - 1]);
+        }
+    else if (xwrap == -1) { // Goes around left edge.
+        if (!ywrap) // Goes around left edge only.
+            result = data[i][j] + (data[Nx - 2][j] - data[Nx - 1][j]);
+        else if(ywrap == 1) // Goes around bot-left corner.
+            result = data[i][j] + (data[1][Ny -2] - data[0][Nx -1]);
+        else if (ywrap == -1) // Goes around top-left corner.
+            result = data[i][j] + (data[Nx - 2][Ny - 2] - data[Nx - 1][Ny - 1]);
     }
-    else if (xwrap == -1 && ywrap == 0) { // Goes around the left side.
-        printf("Negxwrap\n");
-        result  = data[i][j] + (data[Nx - 1][j] - data[Nx - 2][j]);
-    }
-
     return result;
-
-  }
+}
 
   void setu(int i, int j, double u) {
     /* This function sets the u values of the Point object at position
