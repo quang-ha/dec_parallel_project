@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include <random>
+#include <cstdio>
 
 #include "Point.h"
 
@@ -42,31 +43,38 @@ struct PeriodicGrid2D {
 	 access to the grid point, but a copied Point object which you can use to
 	 do Point ops on.*/
 
-    double wrapped_x_offset = 0, wrapped_y_offset = 0;
     Point result;
     // Wrapping around i = Nx -1
-    int xwrap = 0, wrap = 0;
+    int xwrap = 0, ywrap = 0;
     if (i > Nx - 1) {
       i = i%(Nx - 1);
-      wrapped_x_offset = Lx;
-
+      xwrap = 1;
     }
     else if (i < 0) {
       i = i%(Nx - 1) + Nx - 1;
-      wrapped_x_offset = - Lx;
+      xwrap = -1   ;
     }
     if (j > Ny - 1) {
       j = j%(Ny - 1);
-      wrapped_y_offset = Ly;
+      ywrap = 1;
     }
     else if (j < 0) {
       j = j%(Ny - 1) + Ny - 1;
-      wrapped_y_offset = - Ly;
+      ywrap = -1;
     }
-    if (wrapped_x_offset == 0 && wrapped_y_offset == 0)
+    if (!xwrap && !ywrap) // No wrap. Point is interior.
       return data[i][j];
-    else
-      return data[i][j] + Point(wrapped_x_offset, wrapped_y_offset);
+    else if (xwrap == 1 && ywrap == 0) { // Goes around the right side.
+        printf("Posxwrap\n");
+        result = data[i][j] + (data[0][j] - data[1][j]);
+    }
+    else if (xwrap == -1 && ywrap == 0) { // Goes around the left side.
+        printf("Negxwrap\n");
+        result  = data[i][j] + (data[Nx - 1][j] - data[Nx - 2][j]);
+    }
+
+    return result;
+
   }
 
   void setu(int i, int j, double u) {
