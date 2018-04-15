@@ -3,9 +3,9 @@
 
 
 int main() {
-  int imax = 3, jmax = 3;
+  int imax = 5, jmax = 5;
     PeriodicGrid2D g(imax, jmax, 1, 1);
-    for (int i = 0; i < imax; ++i) {
+    for (int i = -1; i <= imax; ++i) {
         for (int j = -1; j <= jmax; ++j) {
             Point p = g.getxy(i, j);
             Point q = g(i, j);
@@ -19,8 +19,8 @@ int main() {
     printf("%f %f\n", c.x, c.y);
     g.print_coords();
     // g.skewx(30*3.14159265/180);
-    for (int i = 0; i < imax; ++i) {
-         for (int j = 0; j < jmax; ++j) {
+    for (int i = 0; i < imax; i += 1) {
+         for (int j = 0; j < jmax; j += 1) {
            double ed01sq = distsq(g.getxy(i, j), g.getxy(i-1, j));
            double ed02sq = distsq(g.getxy(i, j), g.getxy(i-1, j+1));
            double ed03sq = distsq(g.getxy(i, j), g.getxy(i, j+1));

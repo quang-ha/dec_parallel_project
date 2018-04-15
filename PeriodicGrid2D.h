@@ -61,49 +61,61 @@ struct PeriodicGrid2D {
     else if (j < 0) {
       ywrap = -1;
     }
-    if (!xwrap && !ywrap) // No wrap. Point is interior.
+    if (!xwrap && !ywrap) {// No wrap. Point is interior.
       return data[i][j];
-    else if (xwrap == 1) { // Goes around the right side.
-        // printf("Posxwrap\n");
-        i = Nx - 1; // Base point to which offset is added.
-        if (!ywrap) {// Goes around right edge only.
-            offset = data[1][j] - data[0][j];
-            //printf("Offset x:%f y:%f\n", offset.x, offset.y);
-            // printf("Data x:%f y:%f\n", data[i][j].x, data[i][j].y);
-            // printf("\nOffset coords %f %f\n", offset.x, offset.y);
-            result = data[i][j] + offset;
-            return result;
+    }
+    /* Convention followed:
+    X axis goes from origin DOWNWARDS.
+    Y axis goes from origin RIGHTWARDS.
+    This is done so we can imagine X and Y indices (i and j) conventionally
+    as array locations. So moving along the X axis is going downwards, and
+    moving along Y is rightwards.
+     */
+    // Top and bottom edges
+    if (xwrap !=0 && ywrap == 0) {
+      if (xwrap == 1) { // Went around bot edge.
+          offset = data[1][j] - data[0][j];
+          return data[Nx - 1][j] + offset;
+      }
+      if (xwrap == -1) { // Went around top edge.
+        offset = data[Nx - 2][j] - data[Nx - 1][j];
+        return data[0][j] + offset;
+      }
+    }
+    // Left and right edges.
+    if (xwrap == 0 && ywrap != 0) {
+        if (ywrap == 1) { // Went around right edge.
+            offset = data[i][1] - data[i][0];
+            return data[i][Ny - 1] + offset;
         }
-        else if(ywrap == 1) { // Goes around bot-right corner.
-            j = Ny - 1;
-            offset = data[1][1] - data[0][0];
-            // printf("\n!!BOT RIGHT!!\nOffset coords %f %f\n\n", offset.x, offset.y);
-            result = data[i][j] + offset;
-            return result;
-        }
-        else if (ywrap == -1) {// Goes around top-right corner.
-            j = 0;
-            offset = data[1][Ny - 2] - data[0][Ny - 1];
-            result = data[i][j] + offset;
-            return result;
+        if (ywrap == -1) { // Went around left edge.
+          offset = data[i][Ny - 2] - data[i][Ny - 1];
+          return data[i][0] + offset;
         }
     }
-    else if (xwrap == -1) { // Goes around left edge.
-        i = 0;
-        if (!ywrap) {// Goes around left edge only.
-            result = data[i][j] + (data[Nx - 2][j] - data[Nx - 1][j]);
-            return result;
-        }
-        else if(ywrap == 1)  {// Goes around bot-left corner.
-            j = Ny - 1;
-            result = data[i][j] + (data[1][Ny -2] - data[0][Nx -1]);
-        }
-        else if (ywrap == -1) {// Goes around top-left corner.
-            j = 0;
-            result = data[i][j] + (data[Nx - 2][Ny - 2] - data[Nx - 1][Ny - 1]);
-        }
+
+    // Bot right corner. [1]
+    if (xwrap == 1 && ywrap == 1) {
+        offset = data[1][1] - data[0][0];
+        return data[Nx - 1][Ny - 1] + offset;
     }
-    return result;
+    // Bot left corner. [2]
+    if (xwrap == 1 && ywrap == -1) {
+        offset = data[1][Ny - 2] - data[0][Ny - 1];
+        return data[Nx - 1][0] + offset;
+    }
+
+    // Top right corner. [3]
+    if (xwrap == -1 && ywrap == 1) {
+        offset = data[Nx - 2][1] - data[Nx - 1][0];
+        return data[0][Nx - 1] + offset;
+    }
+
+    // Top left corner. [4]
+    if (xwrap == -1 && ywrap == -1) {
+        offset = data[Nx - 2][Ny - 2] - data[Nx - 1][Ny - 1];
+        return data[0][0] + offset;
+    }
 }
 
   void setu(int i, int j, double u) {
