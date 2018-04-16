@@ -75,46 +75,62 @@ struct PeriodicGrid2D {
     if (xwrap !=0 && ywrap == 0) {
       if (xwrap == 1) { // Went around bot edge.
           offset = data[1][j] - data[0][j];
-          return data[Nx - 1][j] + offset;
+          result = data[Nx - 1][j] + offset;
+          result.u = data[1][j].u;
+          return result;
       }
       if (xwrap == -1) { // Went around top edge.
         offset = data[Nx - 2][j] - data[Nx - 1][j];
-        return data[0][j] + offset;
+        result = data[0][j] + offset;
+        result.u = data[Nx - 2][j].u;
+        return result;
       }
     }
     // Left and right edges.
     if (xwrap == 0 && ywrap != 0) {
         if (ywrap == 1) { // Went around right edge.
             offset = data[i][1] - data[i][0];
-            return data[i][Ny - 1] + offset;
+            result = data[i][Ny - 1] + offset;
+            result.u = data[i][1].u;
+            return result;
         }
         if (ywrap == -1) { // Went around left edge.
           offset = data[i][Ny - 2] - data[i][Ny - 1];
-          return data[i][0] + offset;
+          result = data[i][0] + offset;
+          result.u = data[i][Ny - 2].u;
+          return result;
         }
     }
 
     // Bot right corner. [1]
     if (xwrap == 1 && ywrap == 1) {
         offset = data[1][1] - data[0][0];
-        return data[Nx - 1][Ny - 1] + offset;
+        result = data[Nx - 1][Ny - 1] + offset;
+        result.u = data[1][1].u;
+        return result;
     }
     // Bot left corner. [2]
     if (xwrap == 1 && ywrap == -1) {
         offset = data[1][Ny - 2] - data[0][Ny - 1];
-        return data[Nx - 1][0] + offset;
+        result = data[Nx - 1][0] + offset;
+        result.u = data[1][Ny - 2].u;
+        return result;
     }
 
     // Top right corner. [3]
     if (xwrap == -1 && ywrap == 1) {
         offset = data[Nx - 2][1] - data[Nx - 1][0];
-        return data[0][Nx - 1] + offset;
+        result = data[0][Nx - 1] + offset;
+        result.u = data[Nx - 2][1].u;
+        return result;
     }
 
     // Top left corner. [4]
     if (xwrap == -1 && ywrap == -1) {
         offset = data[Nx - 2][Ny - 2] - data[Nx - 1][Ny - 1];
-        return data[0][0] + offset;
+        result = data[0][0] + offset;
+        result.u = data[Nx - 2][Ny - 2].u;
+        return result;
     }
 }
 
