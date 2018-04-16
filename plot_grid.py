@@ -11,22 +11,7 @@ x, y = data[1:, 0], data[1:, 1]
 
 # Draw lines on left subplot
 plt.subplot(121)
-for i in range(Nx):
-    for j in range(Ny):
-        if ((i < Nx-1) and (j < Ny-1)):
-            plt.plot((x[i*Ny + j], x[(i+1)*Ny + j]),
-                     (y[i*Ny + j], y[(i+1)*Ny + j]), color='b')
-            plt.plot((x[i*Ny + j], x[(i+1)*Ny + (j+1)]),
-                     (y[i*Ny + j], y[(i+1)*Ny + (j+1)]), color='b')
-            plt.plot((x[i*Ny + j], x[i*Ny + (j+1)]),
-                     (y[i*Ny + j], y[i*Ny + (j+1)]), color='b')
-        elif ((i < Nx-1) and (j == Ny-1)):
-            plt.plot((x[i*Ny + j], x[(i+1)*Ny + j]),
-                     (y[i*Ny + j], y[i*Ny + j]), color='b')
-        elif ((i == Nx-1) and (j < Ny-1)):
-            plt.plot((x[i*Ny + j], x[i*Ny + j+1]),
-                     (y[i*Ny + j], y[i*Ny + j+1]), color='b')
-
+plt.triplot(x, y)
 plt.scatter(x, y)
 plt.axis('equal')
 plt.axis('off')
@@ -34,8 +19,8 @@ plt.axis('off')
 # Then plot the eigenvalues
 plt.subplot(122)
 eigs_data = np.loadtxt("eigVals.dat", skiprows=1)
-plt.plot(eigs_data)
-plt.xlabel("N")
+plt.scatter(np.linspace(1, len(eigs_data), len(eigs_data)), eigs_data)
+plt.xlabel("Eigennumber")
 plt.ylabel("Eigenvalues")
 
 # Save figure
