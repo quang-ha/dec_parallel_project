@@ -76,13 +76,11 @@ struct PeriodicGrid2D {
       if (xwrap == 1) { // Went around bot edge.
           offset = data[1][j] - data[0][j];
           result = data[Nx - 1][j] + offset;
-          result.u = data[1][j].u;
           return result;
       }
       if (xwrap == -1) { // Went around top edge.
         offset = data[Nx - 2][j] - data[Nx - 1][j];
         result = data[0][j] + offset;
-        result.u = data[Nx - 2][j].u;
         return result;
       }
     }
@@ -91,13 +89,11 @@ struct PeriodicGrid2D {
         if (ywrap == 1) { // Went around right edge.
             offset = data[i][1] - data[i][0];
             result = data[i][Ny - 1] + offset;
-            result.u = data[i][1].u;
             return result;
         }
         if (ywrap == -1) { // Went around left edge.
           offset = data[i][Ny - 2] - data[i][Ny - 1];
           result = data[i][0] + offset;
-          result.u = data[i][Ny - 2].u;
           return result;
         }
     }
@@ -106,14 +102,12 @@ struct PeriodicGrid2D {
     if (xwrap == 1 && ywrap == 1) {
         offset = data[1][1] - data[0][0];
         result = data[Nx - 1][Ny - 1] + offset;
-        result.u = data[1][1].u;
         return result;
     }
     // Bot left corner. [2]
     if (xwrap == 1 && ywrap == -1) {
         offset = data[1][Ny - 2] - data[0][Ny - 1];
         result = data[Nx - 1][0] + offset;
-        result.u = data[1][Ny - 2].u;
         return result;
     }
 
@@ -121,7 +115,6 @@ struct PeriodicGrid2D {
     if (xwrap == -1 && ywrap == 1) {
         offset = data[Nx - 2][1] - data[Nx - 1][0];
         result = data[0][Nx - 1] + offset;
-        result.u = data[Nx - 2][1].u;
         return result;
     }
 
@@ -129,7 +122,6 @@ struct PeriodicGrid2D {
     if (xwrap == -1 && ywrap == -1) {
         offset = data[Nx - 2][Ny - 2] - data[Nx - 1][Ny - 1];
         result = data[0][0] + offset;
-        result.u = data[Nx - 2][Ny - 2].u;
         return result;
     }
 }
@@ -164,7 +156,7 @@ struct PeriodicGrid2D {
       // Skew after making the grid. I think this should work even for randomly
       // moved points, since only the individual point positions matter.
       double relative_x_offset = std::tan(theta);
-      double relative_y_offset = 0;
+      /* double relative_y_offset = 0; */
       for (int i = 0; i < Nx; ++i) {
           for (int j = 0; j < Ny; ++j) {
               data[i][j].y += relative_x_offset*(data[i][j].x);
