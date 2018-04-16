@@ -8,27 +8,41 @@
 
 #include "LaplacePeriodicGrid2D.h"
 
-#define NX 8 // Number of points in x direction
-#define DXDY 1.73205080757 // Ratio between dx and dy for 60 degree
+#define NX 16 // Number of points in x direction
+#define NY 16 // Number of points in Y direction
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 
 int main(int argc, char* argv[])
 {
   // The PeriodicGrid2D API has changed and now always starts from the origin.
-  PeriodicGrid2D pg(NX, DXDY, HIGH, HIGH);
+  PeriodicGrid2D pg(NX, NY, HIGH, HIGH);
   pg.print_coords();
   LaplacePeriodicGrid2D lpg(pg);
 
+  // double x[NX*NY];
+  // x[NX/2 + (NY/2)*NX] = 1.0;
+  // printf("x \n");
+  // for (int i=0; i<NX*NY; i++)
+  //   printf("%f ", x[i]);
+  // printf("\n");
+  
+  // double y[NX*NY];
+  // lpg.perform_op(x, y);
+  // printf("y \n");
+  // for (int i=0; i<NX*NY; i++)
+  //   printf("%f ", y[i]);
+  // printf("\n");
+  
   // Large eigenvalue
   Spectra::SymEigsSolver<double, Spectra::LARGEST_ALGE, LaplacePeriodicGrid2D>
-    l_eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
+    l_eigs(&lpg, 0.5*pg.Ny*pg.Nx, pg.Ny*pg.Nx-1);
   l_eigs.init();
   l_eigs.compute();
 
   // Large eigenvalue
   Spectra::SymEigsSolver<double, Spectra::SMALLEST_ALGE, LaplacePeriodicGrid2D>
-    s_eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
+    s_eigs(&lpg, 0.5*pg.Ny*pg.Nx, pg.Ny*pg.Nx-1);
   s_eigs.init();
   s_eigs.compute();
   
