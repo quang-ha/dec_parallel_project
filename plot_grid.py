@@ -19,8 +19,8 @@ plt.axis('off')
 # Then plot the eigenvalues
 plt.subplot(122)
 eigs_data = np.loadtxt("eigVals.dat", skiprows=1)
-plt.plot(eigs_data)
-plt.xlabel("N")
+plt.scatter(np.linspace(1, len(eigs_data), len(eigs_data)), eigs_data)
+plt.xlabel("Eigennumber")
 plt.ylabel("Eigenvalues")
 
 # Save figure
