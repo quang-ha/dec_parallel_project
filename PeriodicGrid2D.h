@@ -144,18 +144,18 @@ struct PeriodicGrid2D {
        reflect the coordinate offset, which is required for grid calculations.*/
     // Wrapping around i = Nx -1
     if (i > Nx - 1) {
-      i = i%(Nx - 1);
+      i = i%Nx;
     }
     else if (i < 0) {
-      i = i%(Nx - 1) + Nx - 1;
+      i = (i+Nx)%Nx;
     }
-      if (j > Ny - 1) {
-        j = j%(Ny - 1);
-      }
-      else if (j < 0) {
-        j = j%(Ny - 1) + Ny - 1;
-      }
-      data[i][j].u= u;
+    if (j > Ny - 1) {
+      j = j%Ny;
+    }
+    else if (j < 0) {
+      j = (j+Ny)%Ny;
+    }
+    data[i][j].u= u;
   }
 
 
@@ -180,16 +180,16 @@ struct PeriodicGrid2D {
        coordinates of the point _with_ the proper offsets required for weight
        calculations.*/
     if (i > Nx - 1) {
-      i = i%(Nx - 1);
+      i = i%Nx;
     }
     else if (i < 0) {
-      i = i%(Nx - 1) + Nx - 1;
+      i = (i+Nx)%Nx;
     }
     if (j > Ny - 1) {
-      j = j%(Ny - 1);
+      j = j%Ny;
     }
     else if (j < 0) {
-      j = j%(Ny - 1) + Ny - 1;
+      j = (j+Ny)%Ny;
     }
 
     return data[i][j];
