@@ -11,7 +11,7 @@ x, y = data[1:, 0], data[1:, 1]
 
 # Draw lines on left subplot
 plt.subplot(121)
-plt.triplot(a[:, 0], a[:, 1])
+plt.triplot(x, y)
 plt.scatter(x, y)
 plt.axis('equal')
 plt.axis('off')
