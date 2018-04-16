@@ -8,8 +8,8 @@
 
 #include "LaplacePeriodicGrid2D.h"
 
-#define NX 8 // Number of points in x direction
-#define NY 8 // Number of points in Y direction
+#define NX 16 // Number of points in x direction
+#define NY 16 // Number of points in Y direction
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 
@@ -36,13 +36,13 @@ int main(int argc, char* argv[])
   
   // Large eigenvalue
   Spectra::SymEigsSolver<double, Spectra::LARGEST_ALGE, LaplacePeriodicGrid2D>
-    l_eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
+    l_eigs(&lpg, 0.5*pg.Ny*pg.Nx, pg.Ny*pg.Nx-1);
   l_eigs.init();
   l_eigs.compute();
 
   // Large eigenvalue
   Spectra::SymEigsSolver<double, Spectra::SMALLEST_ALGE, LaplacePeriodicGrid2D>
-    s_eigs(&lpg, 0.5*(pg.Ny*pg.Nx-1), pg.Ny*pg.Nx-1);
+    s_eigs(&lpg, 0.5*pg.Ny*pg.Nx, pg.Ny*pg.Nx-1);
   s_eigs.init();
   s_eigs.compute();
   
