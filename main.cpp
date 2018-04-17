@@ -8,8 +8,8 @@
 
 #include "LaplacePeriodicGrid2D.h"
 
-#define NX 16 // Number of points in x direction
-#define NY 16 // Number of points in Y direction
+#define NX 8 // Number of points in x direction
+#define NY 8 // Number of points in Y direction
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 
@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 {
   // The PeriodicGrid2D API has changed and now always starts from the origin.
   PeriodicGrid2D pg(NX, NY, HIGH, HIGH);
+  pg.wiggle(0.05);
   pg.print_coords();
   LaplacePeriodicGrid2D lpg(pg);
 
