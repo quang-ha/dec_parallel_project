@@ -17,6 +17,7 @@ int main() {
     Point a(3, 3), b( 1, 1);
     Point c  = a + b;
     printf("%f %f\n", c.x, c.y);
+    g.wiggle(3e-2);
     g.print_coords();
     // g.skewx(30*3.14159265/180);
     for (int i = 0; i < imax; i += 1) {
