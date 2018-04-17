@@ -159,10 +159,11 @@ struct PeriodicGrid2D {
   }
 
 
-void wiggle(const double r) {
+void wiggle(const double side_frac) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0, 2*M_PI);
+	double r = side_frac*dLx;
     for (int i = 0; i < Nx; ++i) {
         for (int j = 0; j < Ny; ++j) {
             double theta = dis(gen);
