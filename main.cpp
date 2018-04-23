@@ -5,6 +5,7 @@
 #include <SymEigsSolver.h>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "LaplacePeriodicGrid2D.h"
 
@@ -17,8 +18,9 @@ int main(int argc, char* argv[])
 {
   // The PeriodicGrid2D API has changed and now always starts from the origin.
   PeriodicGrid2D pg(NX, NY, HIGH, HIGH);
-  pg.wiggle(0.05);
-  pg.print_coords();
+  double wiggle_mag = 0.05;
+  pg.wiggle(wiggle_mag);
+  pg.print_coords(wiggle_mag);
   LaplacePeriodicGrid2D lpg(pg);
 
   // double x[NX*NY];
@@ -46,10 +48,14 @@ int main(int argc, char* argv[])
     s_eigs(&lpg, 0.5*pg.Ny*pg.Nx, pg.Ny*pg.Nx-1);
   s_eigs.init();
   s_eigs.compute();
-  
+
+  // Generate file name
+  std::ostringstream oss;
+  oss << "eigVals_" << wiggle_mag << ".dat";
+  std::string outFilename = oss.str();
   // Writing to file
   std::ofstream outFile;
-  outFile.open("eigVals.dat");
+  outFile.open(outFilename);
   
   // Print out large eigenvalues
   if(l_eigs.info() == Spectra::SUCCESSFUL)

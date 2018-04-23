@@ -5,6 +5,8 @@
 #include <vector>
 #include <random>
 #include <cstdio>
+#include <string>
+#include <sstream>
 
 #include "Point.h"
 
@@ -188,9 +190,14 @@ void wiggle(const double side_frac) {
     return data[i][j];
   }
   // Print the point coordinates out to a file
-  void print_coords() {
+  void print_coords(double &wiggle_mag) {
+    // Generate file name
+    std::ostringstream oss;
+    oss << "coords_" << wiggle_mag << ".dat";
+    std::string outFilename = oss.str();
+  
     FILE * pfile;
-    pfile = fopen("coords.dat", "w");
+    pfile = fopen(outFilename.c_str(), "w");
     fprintf(pfile, "Nx \t Ny \n");
     fprintf(pfile, "x-coord \t y-coord \n");
 
