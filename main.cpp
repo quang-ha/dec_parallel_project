@@ -18,7 +18,8 @@ int main(int argc, char* argv[])
 {
   // The PeriodicGrid2D API has changed and now always starts from the origin.
   PeriodicGrid2D pg(NX, NY, HIGH, HIGH);
-  double wiggle_mag = 0.05;
+  // Slighly moving the points
+  double wiggle_mag = 0.00;
   pg.wiggle(wiggle_mag);
   pg.print_coords(wiggle_mag);
   LaplacePeriodicGrid2D lpg(pg);
