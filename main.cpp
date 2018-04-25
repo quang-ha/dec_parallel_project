@@ -9,8 +9,8 @@
 
 #include "LaplacePeriodicGrid2D.h"
 
-#define NX 8 // Number of points in x direction
-#define NY 8 // Number of points in Y direction
+#define NX 16 // Number of points in x direction
+#define NY 16 // Number of points in Y direction
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 
@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
   // The PeriodicGrid2D API has changed and now always starts from the origin.
   PeriodicGrid2D pg(NX, NY, HIGH, HIGH);
   // Slighly moving the points
-  double wiggle_mag = 0.00;
+  double wiggle_mag = 0.25;
   pg.wiggle(wiggle_mag);
   pg.print_coords(wiggle_mag);
   LaplacePeriodicGrid2D lpg(pg);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 
   // Generate file name
   std::ostringstream oss;
-  oss << "eigVals_" << wiggle_mag << ".dat";
+  oss << "eigVals_" << NX << "_" << NY << "_" << wiggle_mag << ".dat";
   std::string outFilename = oss.str();
   // Writing to file
   std::ofstream outFile;

@@ -193,7 +193,7 @@ void wiggle(const double side_frac) {
   void print_coords(double &wiggle_mag) {
     // Generate file name
     std::ostringstream oss;
-    oss << "coords_" << wiggle_mag << ".dat";
+    oss << "coords_" << Nx << "_" << Ny << "_" << wiggle_mag << ".dat";
     std::string outFilename = oss.str();
   
     FILE * pfile;
