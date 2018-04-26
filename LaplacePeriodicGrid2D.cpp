@@ -19,13 +19,17 @@ int LaplacePeriodicGrid2D::cols()
 /*=======================================================================*/
 void LaplacePeriodicGrid2D::perform_op(double *x_in, double *x_out) {
   // Strides 1D vector into 2D matrix
+  
+  double temp[g.Nx][g.Ny];
+  #pragma omp parallel
+  {
+  #pragma omp for collapse(2) schedule(static)
   for (int i=0; i < g.Nx; ++i)
     for (int j=0; j < g.Ny; ++j)
       g.setu(i, j, x_in[i*g.Nx + j]);
 
   // Set up a temporary 2D array to store the update value
-  double temp[g.Nx][g.Ny];
-  
+  #pragma omp for collapse(2) schedule(static)
   for (int i = 0; i < g.Nx; ++i) {
     for (int j = 0; j < g.Ny; ++j) {
       // Edges from center.
@@ -74,12 +78,14 @@ void LaplacePeriodicGrid2D::perform_op(double *x_in, double *x_out) {
   }
 
   // Strides 2D matrix back into 2D matrix
+  #pragma omp for collapse(2)
   for (int i=0; i < g.Nx; ++i)
     for (int j=0; j < g.Ny; ++j)
       {
 	g.setu(i, j, temp[i][j]);
 	x_out[i*g.Nx + j] = g(i, j).u;
       }
+  }
 }
 
 /*=======================================================================*/

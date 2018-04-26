@@ -26,3 +26,8 @@
 
 # Object file
 *.o
+
+# Data files
+*.dat
+*.data
+*.dat*
