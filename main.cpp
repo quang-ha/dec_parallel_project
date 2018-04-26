@@ -9,8 +9,8 @@
 
 #include "LaplacePeriodicGrid2D.h"
 
-#define NX 70 // Number of points in x direction
-#define NY 70 // Number of points in Y direction
+#define NX 81 // Number of points in x direction
+#define NY 81 // Number of points in Y direction
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 
