@@ -6,18 +6,22 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #include "LaplacePeriodicGrid2D.h"
 
-#define NX 81 // Number of points in x direction
-#define NY 81 // Number of points in Y direction
+#define NX 70 // Number of points per side.
 #define LOW 0.0 // Low boundary
 #define HIGH 1.0 // High boundary
 
 int main(int argc, char* argv[])
 {
   // The PeriodicGrid2D API has changed and now always starts from the origin.
-  PeriodicGrid2D pg(NX, NY, HIGH, HIGH);
+  int N = 20;
+  if (argc > 1)
+  	N = std::atoi(argv[1]);
+  printf("Grid side size: %d\n", N);
+  PeriodicGrid2D pg(N, N, HIGH, HIGH);
   // Slighly moving the points
   double wiggle_mag = 0.25;
   pg.wiggle(wiggle_mag);
@@ -39,20 +43,22 @@ int main(int argc, char* argv[])
   // printf("\n");
   // Large eigenvalue
   Spectra::SymEigsSolver<double, Spectra::LARGEST_ALGE, LaplacePeriodicGrid2D>
-    l_eigs(&lpg, 15, 100);
+    l_eigs(&lpg, 5, 15);
   l_eigs.init();
-  l_eigs.compute();
+
 
 
   // Large eigenvalue
   Spectra::SymEigsSolver<double, Spectra::SMALLEST_ALGE, LaplacePeriodicGrid2D>
-    s_eigs(&lpg, 15, 100);
+    s_eigs(&lpg, 5, 15);
   s_eigs.init();
+
+  l_eigs.compute();
   s_eigs.compute();
 
   // Generate file name
   std::ostringstream oss;
-  oss << "eigVals_" << NX << "_" << NY << "_" << wiggle_mag << ".dat";
+  oss << "eigVals_" << N << "_" << N << "_" << wiggle_mag << ".dat";
   std::string outFilename = oss.str();
   // Writing to file
   std::ofstream outFile;

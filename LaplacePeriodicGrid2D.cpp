@@ -27,7 +27,7 @@ void LaplacePeriodicGrid2D::perform_op(double *x_in, double *x_out) {
       g.setu(i, j, x_in[i*g.Nx + j]);
 
   // Set up a temporary 2D array to store the update value
-  #pragma omp parallel for collapse(2) schedule(static)
+  #pragma omp parallel for simd schedule(static) collapse(2)
   for (int i = 0; i < g.Nx; ++i) {
     for (int j = 0; j < g.Ny; ++j) {
       // Edges from center.
