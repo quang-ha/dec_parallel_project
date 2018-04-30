@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -fPIC -g -std=c++11 -Wall -O3 -ffast-math -I$(HOME)/EigenSpectra/SpectraSrc/include -fopenmp
+CXXFLAGS = -fPIC -g -std=c++11 -Wall -O3 -ffast-math -I$(EIG_DIR) -I$(SPECTRA_DIR) -fopenmp
 
 OBJECTS = main.o LaplacePeriodicGrid2D.o
 
