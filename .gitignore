@@ -19,7 +19,6 @@
 *.out
 *.exe
 *.dat
-*.png
 
 # Compressed file
 *.tar.gz
