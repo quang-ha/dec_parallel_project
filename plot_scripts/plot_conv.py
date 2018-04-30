@@ -19,7 +19,7 @@ for n in range(len(N)):
         # Ratio offset
         ratio = np.sqrt(3)
         eig_data = np.loadtxt(eigFile, skiprows=1)
-        eig_data = ((N[n]/N[0])**2)*ratio*eig_data[::-1]
+        eig_data = ((ratio*N[n]/N[0])**2)*eig_data[::-1]
         # Plot it
         plt.plot(range(len(eig_data)), eig_data, label=r'$N$={}, $\sigma$={}'.format(N[n], sigma[i]),
                  marker=next(marker), markersize=8, lw=0.01)
