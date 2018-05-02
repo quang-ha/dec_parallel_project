@@ -13,7 +13,7 @@ eigVals = []
 marker = itertools.cycle(('o', 'v', '^', 'h', 'd', 'p'))
 colors = cm.jet(np.linspace(0, 1, len(N)))
 
-fig, axs = plt.subplots(1, 3, figsize=(30, 8), edgecolor='k')
+fig, axs = plt.subplots(1, 3, figsize=(15, 6), edgecolor='k', sharey=True)
 axs = axs.ravel()
 
 # Create the graph
